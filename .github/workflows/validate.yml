@@ -1,0 +1,31 @@
+name: Validate science kits
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate notebooks and Python readers
+        run: |
+          python -m compileall kits
+          python - <<'PY'
+          import ast
+          import json
+          from pathlib import Path
+
+          for path in Path("kits").rglob("*.ipynb"):
+              notebook = json.loads(path.read_text(encoding="utf-8"))
+              if notebook.get("nbformat") != 4:
+                  raise SystemExit(f"{path}: expected nbformat 4")
+              for index, cell in enumerate(notebook.get("cells", []), 1):
+                  if cell.get("cell_type") == "code":
+                      ast.parse("".join(cell.get("source", [])), filename=f"{path}:cell_{index}")
+              print(f"validated {path}")
+          PY
