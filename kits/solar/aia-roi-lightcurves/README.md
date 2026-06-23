@@ -13,6 +13,15 @@ https://colab.research.google.com/github/rudimirz/openmonitor-science-kits/blob/
 
 Paste an OpenMonitor AIA job id, result id, or share link into the notebook.
 
+The notebook is preloaded with this public demo run:
+
+```text
+aia_963db1ee7c6b49b9a9
+```
+
+Run all cells to download the cached result and inspect the exported FITS,
+CSV, metadata, plot, and movie files.
+
 ## What Files Do I Need?
 
 For a quick visual check:
